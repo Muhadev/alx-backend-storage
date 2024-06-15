@@ -1,16 +1,16 @@
 -- Task 0: We are all unique!
 
--- This script creates a table `users` with specified attributes:
--- - id: integer, auto increment, primary key
--- - email: string (255), unique, not null
--- - name: string (255)
+-- Check if the `users` table exists before attempting to create it
+-- If the table exists, this script should not fail and should not attempt to recreate the table.
 
--- If the table already exists, it will not fail.
-
+-- Connect to the `holberton` database
 USE holberton;
 
+-- Create the `users` table if it does not already exist
 CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255)
+    id INT AUTO_INCREMENT PRIMARY KEY, -- Attribute id is an integer, never null, auto increment and primary key
+    email VARCHAR(255) NOT NULL UNIQUE, -- Attribute email is a string (255 characters), never null and unique
+    name VARCHAR(255) -- Attribute name is a string (255 characters)
 );
+
+-- Script completed successfully
