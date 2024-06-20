@@ -13,13 +13,13 @@ def count_calls(method: Callable) -> Callable:
     Decorator to count calls to a method.
 
     Args:
-        method: The method to be decorated.
+        method (Callable): The method to be decorated.
 
     Returns:
         Callable: The wrapped method with call count functionality.
     """
     @wraps(method)
-    def wrapper(self, *args, **kwargs) -> Union[str, bytes, int, float, None]:
+    def wrapper(self, *args, **kwargs):
         """
         Wrapper function to increment the call count and call the original method.
 
@@ -37,12 +37,46 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+def call_history(method: Callable) -> Callable:
+    """
+    Decorator to store the history of inputs and outputs for a method.
+
+    Args:
+        method (Callable): The method to be decorated.
+
+    Returns:
+        Callable: The wrapped method with input/output logging functionality.
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        Wrapper function to log inputs and outputs of the original method.
+
+        Args:
+            self: The instance of the class.
+            *args: Positional arguments for the method.
+            **kwargs: Keyword arguments for the method.
+
+        Returns:
+            The result of the original method.
+        """
+        # Log the input arguments to Redis
+        self._redis.rpush(f"{method.__qualname__}:inputs", str(args))
+        
+        # Execute the original method and log the output to Redis
+        result = method(self, *args, **kwargs)
+        self._redis.rpush(f"{method.__qualname__}:outputs", str(result))
+        
+        return result
+
+    return wrapper
+
 class Cache:
     """
     Cache class utilizing Redis for storage.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         """
         Initialize Redis connection and flush the database.
         """
@@ -50,6 +84,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Store data in Redis under a randomly generated key.
