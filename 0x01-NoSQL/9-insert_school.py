@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module 9-insert_school
+Module 9-insert_schoolg
 Provides a function to insert a new document in a MongoDB collection.
 """
 
