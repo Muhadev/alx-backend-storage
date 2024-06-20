@@ -101,7 +101,11 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable[[bytes], Union[str, int, float]]] = None) -> Union[str, bytes, int, float, None]:
+    def get(
+        self,
+        key: str,
+        fn: Optional[Callable[[bytes], Union[str, int, float]]] = None
+    ) -> Union[str, bytes, int, float, None]:
         """
         Retrieve data from Redis and optionally apply a conversion function.
 
