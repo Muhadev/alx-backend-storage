@@ -19,7 +19,7 @@ def count_calls(method: Callable) -> Callable:
         Callable: The wrapped method with call count functionality.
     """
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs) -> Union[str, bytes, int, float, None]:
         """
         Wrapper function to increment the call count and call the original method.
 
@@ -42,7 +42,7 @@ class Cache:
     Cache class utilizing Redis for storage.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize Redis connection and flush the database.
         """
@@ -64,7 +64,7 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, bytes, int, float, None]:
+    def get(self, key: str, fn: Optional[Callable[[bytes], Union[str, int, float]]] = None) -> Union[str, bytes, int, float, None]:
         """
         Retrieve data from Redis and optionally apply a conversion function.
 
