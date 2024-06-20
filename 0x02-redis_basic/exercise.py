@@ -8,6 +8,7 @@ import uuid
 from typing import Union, Callable, Optional
 from functools import wraps
 
+
 def count_calls(method: Callable) -> Callable:
     """
     Decorator to count calls to a method.
@@ -21,7 +22,8 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
-        Wrapper function to increment the call count and call the original method.
+        Wrapper function to increment the call count
+        and call the original method.
 
         Args:
             self: The instance of the class.
@@ -140,6 +142,7 @@ class Cache:
             int: The retrieved integer, or None if the key does not exist.
         """
         return self.get(key, fn=int)
+
 
 def replay(method: Callable):
     """
