@@ -39,6 +39,7 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """
     Decorator to store the history of inputs and outputs for a method.
@@ -64,14 +65,13 @@ def call_history(method: Callable) -> Callable:
         """
         # Log the input arguments to Redis
         self._redis.rpush(f"{method.__qualname__}:inputs", str(args))
-        
         # Execute the original method and log the output to Redis
         result = method(self, *args, **kwargs)
         self._redis.rpush(f"{method.__qualname__}:outputs", str(result))
-        
         return result
 
     return wrapper
+
 
 class Cache:
     """
@@ -110,7 +110,8 @@ class Cache:
             fn: Optional callable to apply to the retrieved data.
 
         Returns:
-            Retrieved data in its original type, or transformed by fn if provided.
+            Retrieved data in its original type, or
+            transformed by fn if provided.
         """
         data = self._redis.get(key)
         if data is None:
